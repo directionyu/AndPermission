@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_base"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#40000000"
+    tools:ignore="ResourceName">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="136.0dip"
+        android:layout_alignParentBottom="true"
+        android:background="#ffffffff">
+
+        <RelativeLayout
+            android:id="@+id/layout_bottom"
+            android:layout_width="fill_parent"
+            android:layout_height="72.0dip"
+            android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:id="@+id/img_icon"
+                android:layout_width="46.0dip"
+                android:layout_height="46.0dip"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="14.0dip"
+                 />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/bt_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="14.0dip"
+                android:clickable="false"
+                android:theme="@style/PermissionSwitchCompatStyle" />
+
+            <TextView
+                android:id="@+id/roy_app_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="14.0dip"
+                android:layout_marginEnd="14.0dip"
+                android:layout_toLeftOf="@+id/bt_switch"
+                tools:text="app_name"
+                android:layout_toRightOf="@+id/img_icon"
+                android:gravity="center_vertical"
+                android:textColor="#ff2b2b2b"
+                android:textSize="16.0sp" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/layout_bottom"
+            android:layout_marginStart="14.0dip"
+            android:layout_marginEnd="14.0dip"
+            android:layout_marginBottom="14.0sp"
+            android:gravity="center"
+            android:text="Please enable this app"
+            android:textColor="#ff2b2b2b"
+            android:textSize="16.0sp" />
+    </RelativeLayout>
+</RelativeLayout>

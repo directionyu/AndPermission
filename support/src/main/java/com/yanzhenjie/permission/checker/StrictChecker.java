@@ -18,6 +18,7 @@ package com.yanzhenjie.permission.checker;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 
 import com.yanzhenjie.permission.runtime.Permission;
 
@@ -33,7 +34,9 @@ public final class StrictChecker implements PermissionChecker {
 
     @Override
     public boolean hasPermission(Context context, String... permissions) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return true;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return true;
+        }
 
         for (String permission : permissions) {
             if (!hasPermission(context, permission)) {
@@ -45,7 +48,9 @@ public final class StrictChecker implements PermissionChecker {
 
     @Override
     public boolean hasPermission(Context context, List<String> permissions) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return true;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return true;
+        }
 
         for (String permission : permissions) {
             if (!hasPermission(context, permission)) {
@@ -85,13 +90,15 @@ public final class StrictChecker implements PermissionChecker {
                 case Permission.WRITE_CALL_LOG:
                     return checkWriteCallLog(context);
                 case Permission.ADD_VOICEMAIL:
-                    return checkAddVoicemail(context);
+                    return true;
                 case Permission.USE_SIP:
                     return checkSip(context);
                 case Permission.PROCESS_OUTGOING_CALLS:
                     return true;
                 case Permission.BODY_SENSORS:
-                    return checkSensors(context);
+                    return checkSensorHeart(context);
+                case Permission.ACTIVITY_RECOGNITION:
+                    return checkSensorActivity(context);
                 case Permission.SEND_SMS:
                 case Permission.RECEIVE_MMS:
                     return true;
@@ -106,6 +113,7 @@ public final class StrictChecker implements PermissionChecker {
                     return checkWriteStorage();
             }
         } catch (Throwable e) {
+            Log.e("Roy", "Permission check error " + e.getLocalizedMessage());
             return false;
         }
         return true;
@@ -167,18 +175,18 @@ public final class StrictChecker implements PermissionChecker {
         return test.test();
     }
 
-    private static boolean checkAddVoicemail(Context context) throws Throwable {
-        PermissionTest test = new AddVoicemailTest(context);
-        return test.test();
-    }
-
     private static boolean checkSip(Context context) throws Throwable {
         PermissionTest test = new SipTest(context);
         return test.test();
     }
 
-    private static boolean checkSensors(Context context) throws Throwable {
-        PermissionTest test = new SensorsTest(context);
+    private static boolean checkSensorHeart(Context context) throws Throwable {
+        PermissionTest test = new SensorHeartTest(context);
+        return test.test();
+    }
+
+    private static boolean checkSensorActivity(Context context) throws Throwable {
+        PermissionTest test = new SensorActivityTest(context);
         return test.test();
     }
 

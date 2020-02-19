@@ -23,6 +23,8 @@
             android:name=".bridge.BridgeActivity"
             android:theme="@style/Permission.Theme"/>
 
+        <activity android:name=".view.EnableNotificationAccessActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <provider
             android:name=".FileProvider"
             android:authorities="${applicationId}.file.path.share"

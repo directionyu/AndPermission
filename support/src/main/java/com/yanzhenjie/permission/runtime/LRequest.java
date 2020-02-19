@@ -16,6 +16,8 @@
 package com.yanzhenjie.permission.runtime;
 
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.yanzhenjie.permission.Action;
@@ -25,6 +27,8 @@ import com.yanzhenjie.permission.checker.StrictChecker;
 import com.yanzhenjie.permission.source.Source;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -38,7 +42,7 @@ class LRequest implements PermissionRequest {
 
     private Source mSource;
 
-    private String[] mPermissions;
+    private List<String> mPermissions;
     private Action<List<String>> mGranted;
     private Action<List<String>> mDenied;
 
@@ -47,8 +51,9 @@ class LRequest implements PermissionRequest {
     }
 
     @Override
-    public PermissionRequest permission(String... permissions) {
-        this.mPermissions = permissions;
+    public PermissionRequest permission(@NonNull String... permissions) {
+        mPermissions = new ArrayList<>();
+        mPermissions.addAll(Arrays.asList(permissions));
         return this;
     }
 
@@ -71,6 +76,8 @@ class LRequest implements PermissionRequest {
 
     @Override
     public void start() {
+        mPermissions = filterPermissions(mPermissions);
+
         new AsyncTask<Void, Void, List<String>>() {
             @Override
             protected List<String> doInBackground(Void... voids) {
@@ -80,7 +87,7 @@ class LRequest implements PermissionRequest {
             @Override
             protected void onPostExecute(List<String> deniedList) {
                 if (deniedList.isEmpty()) {
-                    callbackSucceed();
+                    callbackSucceed(mPermissions);
                 } else {
                     callbackFailed(deniedList);
                 }
@@ -89,21 +96,47 @@ class LRequest implements PermissionRequest {
     }
 
     /**
+     * Filter the permissions you want to apply; remove unsupported and duplicate permissions.
+     */
+    public static List<String> filterPermissions(List<String> permissions) {
+        permissions = new ArrayList<>(new HashSet<>(permissions));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            permissions.remove(Permission.READ_PHONE_NUMBERS);
+            permissions.remove(Permission.ANSWER_PHONE_CALLS);
+        }
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            permissions.remove(Permission.ACTIVITY_RECOGNITION);
+            permissions.remove(Permission.ACCESS_BACKGROUND_LOCATION);
+        }
+        return permissions;
+    }
+//    /**
+//     * Callback acceptance status.
+//     */
+//    private void callbackSucceed() {
+//        if (mGranted != null) {
+//            List<String> permissionList = asList(mPermissions);
+//            try {
+//                mGranted.onAction(permissionList);
+//            } catch (Exception e) {
+//                Log.e("AndPermission", "Please check the onGranted() method body for bugs.", e);
+//                if (mDenied != null) {
+//                    mDenied.onAction(permissionList);
+//                }
+//            }
+//        }
+//    }
+
+    /**
      * Callback acceptance status.
      */
-    private void callbackSucceed() {
+    final void callbackSucceed(List<String> grantedList) {
         if (mGranted != null) {
-            List<String> permissionList = asList(mPermissions);
-            try {
-                mGranted.onAction(permissionList);
-            } catch (Exception e) {
-                Log.e("AndPermission", "Please check the onGranted() method body for bugs.", e);
-                if (mDenied != null) {
-                    mDenied.onAction(permissionList);
-                }
-            }
+            mGranted.onAction(grantedList);
         }
     }
+
 
     /**
      * Callback rejected state.
@@ -117,7 +150,7 @@ class LRequest implements PermissionRequest {
     /**
      * Get denied permissions.
      */
-    private static List<String> getDeniedPermissions(PermissionChecker checker, Source source, String... permissions) {
+    public static List<String> getDeniedPermissions(PermissionChecker checker, Source source, List<String> permissions) {
         List<String> deniedList = new ArrayList<>(1);
         for (String permission : permissions) {
             if (!checker.hasPermission(source.getContext(), permission)) {

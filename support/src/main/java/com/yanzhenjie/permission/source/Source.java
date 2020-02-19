@@ -80,14 +80,14 @@ public abstract class Source {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private AppOpsManager getAppOpsManager() {
         if (mAppOpsManager == null) {
-            mAppOpsManager = (AppOpsManager)getContext().getSystemService(Context.APP_OPS_SERVICE);
+            mAppOpsManager = (AppOpsManager) getContext().getSystemService(Context.APP_OPS_SERVICE);
         }
         return mAppOpsManager;
     }
 
     private NotificationManager getNotificationManager() {
         if (mNotificationManager == null) {
-            mNotificationManager = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         }
         return mNotificationManager;
     }
@@ -121,18 +121,20 @@ public abstract class Source {
     public final boolean canNotify() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return getNotificationManager().areNotificationsEnabled();
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return reflectionOps(OP_POST_NOTIFICATION);
-        } else {
+        }
+//        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            return reflectionOps(OP_POST_NOTIFICATION);
+//        }
+        else {
             return true;
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public final boolean canListenerNotification() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return reflectionOps(OP_ACCESS_NOTIFICATIONS);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            return reflectionOps(OP_ACCESS_NOTIFICATIONS);
+//        }
 
         Context context = getContext();
         String flat = Settings.Secure.getString(context.getContentResolver(), "enabled_notification_listeners");
@@ -158,8 +160,8 @@ public abstract class Source {
             Class<AppOpsManager> appOpsClass = AppOpsManager.class;
             Method method = appOpsClass.getMethod(CHECK_OP_NO_THROW, Integer.TYPE, Integer.TYPE, String.class);
             Field opField = appOpsClass.getDeclaredField(opFieldName);
-            int opValue = (int)opField.get(Integer.class);
-            int result = (int)method.invoke(getAppOpsManager(), opValue, uid, getPackageName());
+            int opValue = (int) opField.get(Integer.class);
+            int result = (int) method.invoke(getAppOpsManager(), opValue, uid, getPackageName());
             return result == AppOpsManager.MODE_ALLOWED || result == MODE_ASK;
         } catch (Throwable e) {
             return true;

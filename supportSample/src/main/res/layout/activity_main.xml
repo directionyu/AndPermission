@@ -138,6 +138,14 @@
                 style="@style/Permission.Button.Weight.Horizontal"
                 android:text="@string/permission_write_setting"/>
         </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/btn_test_notify"
+                style="@style/Permission.Button.Weight.Horizontal"
+                android:text="测试引导"/>
+        </TableRow>
     </TableLayout>
 
 </LinearLayout>

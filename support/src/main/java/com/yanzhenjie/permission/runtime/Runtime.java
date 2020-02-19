@@ -38,6 +38,8 @@ public class Runtime implements RuntimeOption {
 
     private static final PermissionRequestFactory FACTORY;
     private static List<String> sAppPermissions;
+    private static final String ADD_VOICEMAIL_MANIFEST = "android.permission.ADD_VOICEMAIL";
+
 
     static {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -90,7 +92,9 @@ public class Runtime implements RuntimeOption {
      * @param permissions permissions which will be checked.
      */
     private void checkPermissions(String... permissions) {
-        if (sAppPermissions == null) sAppPermissions = getManifestPermissions(mSource.getContext());
+        if (sAppPermissions == null) {
+            sAppPermissions = getManifestPermissions(mSource.getContext());
+        }
 
         if (permissions.length == 0) {
             throw new IllegalArgumentException("Please enter at least one permission.");
@@ -99,7 +103,7 @@ public class Runtime implements RuntimeOption {
         for (String p : permissions) {
             if (!sAppPermissions.contains(p)) {
                 if (!(Permission.ADD_VOICEMAIL.equals(p) &&
-                    sAppPermissions.contains(Permission.ADD_VOICEMAIL_MANIFEST))) {
+                    sAppPermissions.contains(ADD_VOICEMAIL_MANIFEST))) {
                     throw new IllegalStateException(
                         String.format("The permission %1$s is not registered in manifest.xml", p));
                 }

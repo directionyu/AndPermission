@@ -12,6 +12,27 @@ android {
     resourcePrefix 'permission'
 }
 
+apply plugin: 'maven'
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            repository(url: "http://172.30.10.160:8081/nexus/content/repositories/com.ndp.paysdk") {
+                authentication(userName: "gkt", password: "gkt.UDGN324!ud(hd")
+            }
+            pom.project {
+                version '2.0.1-fix-10'
+                artifactId 'support'
+                groupId 'com.yanzhenjie.permission'
+                packaging 'aar'
+                description 'NB Channel Sdk'
+            }
+        }
+    }
+}
+
+
 dependencies {
     api 'com.android.support:support-fragment:28.0.0'
+    api 'com.android.support:appcompat-v7:28.0.0'
 }

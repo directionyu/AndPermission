@@ -29,4 +29,12 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+
+
+    <style name="PermissionSwitchCompatStyle" parent="@style/Theme.AppCompat.Light">
+        <item name="android:colorForeground">#ffb9b9b9</item>
+        <item name="colorControlActivated">#ff009385</item>
+        <item name="colorSwitchThumbNormal">#ffcecece</item>
+    </style>
+
 </resources>

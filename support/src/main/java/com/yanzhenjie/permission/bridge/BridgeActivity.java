@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
@@ -27,6 +28,7 @@ import com.yanzhenjie.permission.overlay.setting.LSettingPage;
 import com.yanzhenjie.permission.overlay.setting.MSettingPage;
 import com.yanzhenjie.permission.source.ActivitySource;
 import com.yanzhenjie.permission.source.Source;
+import com.yanzhenjie.permission.view.EnableNotificationAccessActivity;
 
 /**
  * <p>
@@ -156,6 +158,18 @@ public final class BridgeActivity extends Activity {
             case BridgeRequest.TYPE_NOTIFY_LISTENER: {
                 Intent settingIntent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
                 startActivityForResult(settingIntent, BridgeRequest.TYPE_NOTIFY_LISTENER);
+
+                new Handler().postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        Intent intentNew = new Intent(BridgeActivity.this, EnableNotificationAccessActivity.class);
+                        intentNew.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        BridgeActivity.this.startActivity(intentNew);
+                    }
+                }, 100L);
+
                 break;
             }
             case BridgeRequest.TYPE_WRITE_SETTING: {
