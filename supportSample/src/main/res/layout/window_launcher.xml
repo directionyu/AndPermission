@@ -21,7 +21,7 @@
     android:background="@color/colorAccent"
     android:padding="@dimen/dp_10">
 
-    <android.support.v7.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btn_cancel"
         style="@style/Permission.Button"
         android:layout_alignParentEnd="true"

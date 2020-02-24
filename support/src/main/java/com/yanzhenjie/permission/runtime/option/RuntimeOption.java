@@ -15,7 +15,7 @@
  */
 package com.yanzhenjie.permission.runtime.option;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.yanzhenjie.permission.runtime.PermissionRequest;
 import com.yanzhenjie.permission.runtime.setting.SettingRequest;

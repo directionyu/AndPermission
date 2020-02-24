@@ -21,7 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.KeyEvent;
 
 import com.yanzhenjie.permission.overlay.setting.LSettingPage;
